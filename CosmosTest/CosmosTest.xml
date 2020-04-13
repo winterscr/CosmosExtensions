@@ -1,0 +1,259 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CosmosTest</name>
+    </assembly>
+    <members>
+        <member name="T:CosmosTest.CommonExceptions.ExistsException">
+            <summary>
+                Thrown when something exists that shouldn't.
+            </summary>
+        </member>
+        <member name="T:CosmosTest.CosmosUtility.CosmosEntity">
+             <summary>
+                 Provides an optional base class for Cosmos entities. Supports versioning and heterogeneous containers
+                 along with some of the standard Cosmos fields.
+            
+                 Can be used with <see cref="M:CosmosTest.CosmosUtility.CosmosExtensions.WhereType``1(System.Linq.IQueryable{``0},System.String)"/>, <see cref="M:CosmosTest.CosmosUtility.CosmosExtensions.WhereVersion``1(System.Linq.IQueryable{``0},System.Int32)"/>
+                 and similar methods.
+             </summary>
+        </member>
+        <member name="F:CosmosTest.CosmosUtility.CosmosEntity.DefaultPartition">
+            <summary>
+                The default partition to use if one is not specified
+            </summary>
+        </member>
+        <member name="T:CosmosTest.CosmosUtility.CosmosEntityInfoAttribute">
+            <summary>
+                Can be used to optionally mark <see cref="T:CosmosTest.CosmosUtility.CosmosEntity"/> derived classes with metadata.
+                This metadata can be automatically added to queries for filtering using
+                <see cref="M:CosmosTest.CosmosUtility.CosmosExtensions.WhereCommonAttributed``1(System.Linq.IQueryable{``0})"/>.
+            </summary>
+        </member>
+        <member name="M:CosmosTest.CosmosUtility.CosmosExtensions.ToAsyncEnumerable``1(System.Linq.IQueryable{``0},System.Threading.CancellationToken)">
+            <summary>
+                Execute a cosmos query as an <see cref="T:System.Collections.Generic.IAsyncEnumerable`1" />.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CosmosTest.CosmosUtility.CosmosExtensions.ToMappedAsyncEnumerable``2(System.Linq.IQueryable{``0},System.Func{``0,``1},System.Threading.CancellationToken)">
+            <summary>
+                Execute a cosmos query as an <see cref="T:System.Collections.Generic.IAsyncEnumerable`1" /> and map the resulting objects.
+                If using AutoMapper then consider using ProjectTo() for simple projection instead, unless performing value conversion
+                or other complex maps.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TResult"></typeparam>
+            <param name="source"></param>
+            <param name="mapFunc"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CosmosTest.CosmosUtility.CosmosExtensions.FirstOrDefaultAsync``1(System.Linq.IQueryable{``0},System.Threading.CancellationToken)">
+            <summary>
+                Execute a cosmos query asynchronously only retrieving a single value or null.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CosmosTest.CosmosUtility.CosmosExtensions.MappedFirstOrDefaultAsync``2(System.Linq.IQueryable{``0},System.Func{``0,``1},System.Threading.CancellationToken)">
+            <summary>
+                Execute a cosmos query asynchronously only retrieving the first value or null.
+                The result is mapped if not null.
+                If using AutoMapper then consider using ProjectTo() for simple projection instead, unless performing value conversion
+                or other complex maps.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+            <typeparam name="TResult"></typeparam>
+            <param name="source"></param>
+            <param name="mapFunc"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CosmosTest.CosmosUtility.CosmosExtensions.WhereCommon``1(System.Linq.IQueryable{``0},System.String,System.Int32)">
+            <summary>
+                Include common predicates where the type of the entity matches and the version is at most as specified.
+            </summary>
+            <typeparam name="T"></typeparam>
+            \
+            <param name="source"></param>
+            <param name="type"></param>
+            <param name="versionAtMost"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CosmosTest.CosmosUtility.CosmosExtensions.WhereCommonAttributed``1(System.Linq.IQueryable{``0})">
+            <summary>
+                Include common predicates to the query to filter on the type of the entity and max version of the entity version.
+                The entity type must be attributed with <see cref="T:CosmosTest.CosmosUtility.CosmosEntityInfoAttribute" />.
+                This overload will return all entries that match, ignoring the IsArchived flag if present on the entity.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CosmosTest.CosmosUtility.CosmosExtensions.WhereIsNotArchived``1(System.Linq.IQueryable{``0})">
+            <summary>
+                Include only entities that are not archived. See remarks for information on unit testing.
+            </summary>
+            <remarks>
+                If you want to unit test queries, then use <see cref="M:CosmosTest.CosmosUtility.CosmosExtensions.WhereIsNotArchived``1(System.Linq.IQueryable{``0})"/> or <see cref="M:CosmosTest.CosmosUtility.CosmosExtensions.WhereIsArchived``1(System.Linq.IQueryable{``0})"/> in the repository
+                prior to execution only and not in the testable query.
+            </remarks>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CosmosTest.CosmosUtility.CosmosExtensions.WhereIsArchived``1(System.Linq.IQueryable{``0})">
+            <summary>
+                Include only entities that are archived. See remarks for information on unit testing.
+            </summary>
+            <remarks>
+                If you want to unit test queries, then use <see cref="M:CosmosTest.CosmosUtility.CosmosExtensions.WhereIsNotArchived``1(System.Linq.IQueryable{``0})"/> or <see cref="M:CosmosTest.CosmosUtility.CosmosExtensions.WhereIsArchived``1(System.Linq.IQueryable{``0})"/> in the repository
+                prior to execution only and not in the testable query.
+            </remarks>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CosmosTest.CosmosUtility.CosmosExtensions.WhereTypeAndVersion``1(System.Linq.IQueryable{``0},System.String,System.Int32)">
+            <summary>
+                Include only entities with the specific type and version.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <param name="type"></param>
+            <param name="version"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CosmosTest.CosmosUtility.CosmosExtensions.WhereType``1(System.Linq.IQueryable{``0},System.String)">
+            <summary>
+                Include only entities of the specified type.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CosmosTest.CosmosUtility.CosmosExtensions.WhereVersion``1(System.Linq.IQueryable{``0},System.Int32)">
+            <summary>
+                Include only entities at the specified version.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <param name="version"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CosmosTest.CosmosUtility.CosmosExtensions.WhereVersionAtLeast``1(System.Linq.IQueryable{``0},System.Int32)">
+            <summary>
+                Include only entities where the version is higher or equal to the specified version.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <param name="version"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CosmosTest.CosmosUtility.CosmosExtensions.WhereVersionAtMost``1(System.Linq.IQueryable{``0},System.Int32)">
+            <summary>
+                Include only entities where the version is lower or equal to the specified version.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <param name="version"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CosmosTest.CosmosUtility.CosmosExtensions.WhereInPartition``1(System.Linq.IQueryable{``0},System.String)">
+            <summary>
+                Limits the query to the specified partition.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <param name="partition"></param>
+            <returns></returns>
+        </member>
+        <member name="T:CosmosTest.CosmosUtility.IArchivedEntity">
+            <summary>
+                Can be added to <see cref="T:CosmosTest.CosmosUtility.CosmosEntity"/> derived classes that want to support
+                soft deletion in a consistent manner. Can be used with <see cref="M:CosmosTest.CosmosUtility.CosmosExtensions.WhereIsArchived``1(System.Linq.IQueryable{``0})"/>
+                and <see cref="M:CosmosTest.CosmosUtility.CosmosExtensions.WhereIsNotArchived``1(System.Linq.IQueryable{``0})"/>.
+            </summary>
+        </member>
+        <member name="T:CosmosTest.CosmosUtility.RepositoryException">
+            <summary>
+                A general repository exception that can be thrown by a repository to wrap <see cref="T:Microsoft.Azure.Cosmos.CosmosException"/> exceptions
+                from the Cosmos client.
+            </summary>
+        </member>
+        <member name="T:CosmosTest.CosmosUtility.Serilog.LogQueryDetail">
+            <summary>
+                Add to a Serilog logger context to log to the query detail channel.
+            </summary>
+        </member>
+        <member name="M:CosmosTest.IUserRepository.GetAllUsersAsync(System.Threading.CancellationToken)">
+            <summary>
+                Get all users from the repository.
+            </summary>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CosmosTest.IUserRepository.GetUserByIdAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+                Get a specific user from the repository by their id. Returns null if not found.
+            </summary>
+            <param name="userId">The user ID.</param>
+            <param name="cancellationToken"></param>
+            <returns>The user or null if not found.</returns>
+        </member>
+        <member name="M:CosmosTest.IUserRepository.InsertAsync(CosmosTest.DomainModels.User,System.Threading.CancellationToken)">
+            <summary>
+                Insert a new user.
+            </summary>
+            <param name="user">The user to insert.</param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+            <exception cref="T:CosmosTest.CommonExceptions.ExistsException">Thrown if a conflicting record already exists.</exception>
+            <exception cref="T:CosmosTest.CosmosUtility.RepositoryException">Thrown if a general failure occurs talking to the repository.</exception>
+            <exception cref="T:System.ComponentModel.DataAnnotations.ValidationException">Thrown if the user object does not validate correctly.</exception>
+        </member>
+        <member name="T:CosmosTest.Maps.EntityMaps">
+            <summary>
+                Maps between entities and domain models
+            </summary>
+        </member>
+        <member name="T:CosmosTest.UserRepository">
+            <summary>
+                A sample user repository.
+            </summary>
+        </member>
+        <member name="M:CosmosTest.UserRepository.GetAllUsersAsync(System.Threading.CancellationToken)">
+            <summary>
+                Get all users from the repository.
+            </summary>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CosmosTest.UserRepository.GetUserByIdAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+                Get a specific user from the repository by their id. Returns null if not found.
+            </summary>
+            <param name="userId">The user ID.</param>
+            <param name="cancellationToken"></param>
+            <returns>The user or null if not found.</returns>
+        </member>
+        <member name="M:CosmosTest.UserRepository.InsertAsync(CosmosTest.DomainModels.User,System.Threading.CancellationToken)">
+            <summary>
+                Insert a new user.
+            </summary>
+            <param name="user">The user to insert.</param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+            <exception cref="T:CosmosTest.CommonExceptions.ExistsException">Thrown if a conflicting record already exists.</exception>
+            <exception cref="T:CosmosTest.CosmosUtility.RepositoryException">Thrown if a general failure occurs talking to the repository.</exception>
+            <exception cref="T:System.ComponentModel.DataAnnotations.ValidationException">Thrown if the user object does not validate correctly.</exception>
+        </member>
+    </members>
+</doc>

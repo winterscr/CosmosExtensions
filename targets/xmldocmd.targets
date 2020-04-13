@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Target Name="BuildDocs" AfterTargets="Build" Condition="'$(XmlDocMdTarget)' != '' and '$(NCrunch)' != '1'">
+    <PropertyGroup>
+      <XmlDocMd>$(USERPROFILE)\.dotnet\tools\xmldocmd.exe</XmlDocMd>
+      <XmlDocMdCommand>"$(XmlDocMd)" "$(ProjectDir)$(OutputPath)CosmosTest.dll" "$(XmlDocMdTarget)"</XmlDocMdCommand>
+    </PropertyGroup>
+
+    <Message Importance="High" Text="Building docs with command '$(XmlDocMdCommand)'" Condition="Exists('$(XmlDocMd)')" />
+
+    <MakeDir Directories="$(XmlDocMdTarget)" Condition="!Exists('$(XmlDocMdTarget)')"/>
+    <Exec Condition="Exists('$(XmlDocMd)')" Command="$(XmlDocMdCommand)" />
+  </Target>
+
+  <Target Name="CleanDocs" AfterTargets="Clean" Condition="'$(XmlDocMdTarget)' != ''">
+    <Message Importance="High" Text="Cleaning docs from '$(XmlDocMdTarget)'" />
+
+    <RemoveDir Directories="$(XmlDocMdTarget)" />
+    <MakeDir Directories="$(XmlDocMdTarget)" Condition="!Exists('$(XmlDocMdTarget)')"/>
+  </Target>
+</Project>
